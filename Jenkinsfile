@@ -30,13 +30,13 @@ pipeline {
 
         stage('Build App') {
             steps {
-                script {
-                    // Build the app, assuming the app has a 'build' script in package.json
-                    echo "Building the app..."
-                    sh 'npm run build'  // Replace with the appropriate build command if needed
+                {
+                 "scripts": {
+                 "build-json": "node file.js"
+                 sh 'npm run build-json'  // Replace with the appropriate build command if needed
                 }
             }
-        }
+            }
 
         stage('Package') {
             steps {
