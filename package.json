@@ -1,5 +1,5 @@
 {
   "scripts": {
-    "build-json": "node generateJson.js"
+    "build-json": "node file.js"
   }
 }
