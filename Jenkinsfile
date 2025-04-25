@@ -2,37 +2,71 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'web-app'
-        CONTAINER_NAME = 'web-app-container'
-        PORT = '3000'
+        AWS_REGION = 'eu-north-1' // change as needed
+        S3_BUCKET = 'elasticbeanstalk-eu-north-1-442042508670l' // must exist
+        APP_NAME = 'Dynamicwebsite'
+        ENV_NAME = 'Dynamicwebsite-env"
+        VERSION_LABEL = "V-1"
+        
     }
 
     stages {
-        stage('Clone') {
+        stage('Checkout') {
             steps {
-                git url: 'https://github.com/yeshcrik/web-app.git'
+                git url: 'https://github.com/yeshcrik/dynamic-website.git', branch: 'main'
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Install Dependencies') {
             steps {
-                script {
-                    docker.build("${IMAGE_NAME}:latest")
+                sh 'npm install'
+            }
+        }
+
+        stage('Build App') {
+            steps {
+                sh 'npm run build' // or skip if your app doesn't need build
+            }
+        }
+
+        stage('Package') {
+            steps {
+                sh 'zip -r app.zip * .[^.]*' // zips all files, including hidden ones
+            }
+        }
+
+        stage('Deploy to S3') {
+            steps {
+                
+                sh """  
+                    aws s3 sync . s3://S3_BUCKET --delete
                 }
             }
         }
 
-        stage('Run Docker Container') {
+        stage('Deploy to Elastic Beanstalk') {
             steps {
-                script {
-                    // Stop and remove any previous container
-                    sh "docker rm -f ${CONTAINER_NAME} || true"
-                    
-                    // Run the container on port 3000
-                    sh "docker run -d -p ${PORT}:${PORT} --name ${CONTAINER_NAME} ${IMAGE_NAME}:latest"
+                    sh """
+                        aws elasticbeanstalk create-application-version \
+                            --application-name ${APP_NAME} \
+                            --version-label ${VERSION_LABEL} \
+                            --source-bundle S3Bucket=${S3_BUCKET},S3Key=${VERSION_LABEL}.zip
+
+                        aws elasticbeanstalk update-environment \
+                            --environment-name ${ENV_NAME} \
+                            --version-label ${VERSION_LABEL}
+                    """
                 }
             }
         }
     }
-}
 
+    post {
+        success {
+            echo "✅ Deployment successful!"
+        }
+        failure {
+            echo "❌ Deployment failed."
+        }
+    }
+}
