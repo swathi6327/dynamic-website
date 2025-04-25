@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/yeshcrik/dynamic-website.git', branch: 'main'
+                git url: 'https://github.com/swathi6327/dynamic-website.git', branch: 'main'
             }
         }
         stage('Build App') {
