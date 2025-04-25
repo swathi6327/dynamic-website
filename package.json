@@ -1,5 +1,13 @@
 {
+  "name": "dynamic-website",
+  "version": "1.0.0",
+  "description": "A dynamic website",
+  "main": "file.js",
   "scripts": {
-    "build-json": "node file.js"
+    "start": "node file.js",
+    "build": "echo 'Build script needs to be defined for your app!'"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
   }
 }
