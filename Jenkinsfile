@@ -18,6 +18,16 @@ pipeline {
             }
         }
 
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    // Check if npm is installed and install dependencies
+                    echo "Installing dependencies..."
+                    sh 'npm install'  // Install dependencies if the project uses npm (for Node.js projects)
+                }
+            }
+        }
+
         stage('Build App') {
             steps {
                 script {
