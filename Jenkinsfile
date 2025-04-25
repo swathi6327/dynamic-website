@@ -30,8 +30,6 @@ pipeline {
 
         stage('Build App') {
             steps {
-                 "scripts": {
-                 "build-json": "node file.js"
                  sh 'npm run build-json'  // Replace with the appropriate build command if needed
                 }
             }
