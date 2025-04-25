@@ -5,7 +5,7 @@ pipeline {
         AWS_REGION = 'eu-north-1' // change as needed
         S3_BUCKET = 'elasticbeanstalk-eu-north-1-442042508670l' // must exist
         APP_NAME = 'Dynamicwebsite'
-        ENV_NAME = 'Dynamicwebsite-env"
+        ENV_NAME = 'Dynamicwebsite-env'
         VERSION_LABEL = "V-1"
         
     }
