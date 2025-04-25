@@ -38,15 +38,16 @@ pipeline {
         stage('Deploy to S3') {
             steps {
                 
-                sh """  
+                sh '''  
                     aws s3 sync . s3://S3_BUCKET --delete
+                '''
                 }
             }
         }
 
         stage('Deploy to Elastic Beanstalk') {
             steps {
-                    sh """
+                    sh '''
                         aws elasticbeanstalk create-application-version \
                             --application-name ${APP_NAME} \
                             --version-label ${VERSION_LABEL} \
@@ -55,7 +56,7 @@ pipeline {
                         aws elasticbeanstalk update-environment \
                             --environment-name ${ENV_NAME} \
                             --version-label ${VERSION_LABEL}
-                    """
+                    '''
                 }
             }
         }
