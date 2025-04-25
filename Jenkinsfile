@@ -16,13 +16,6 @@ pipeline {
                 git url: 'https://github.com/yeshcrik/dynamic-website.git', branch: 'main'
             }
         }
-
-        stage('Install Dependencies') {
-            steps {
-                sh 'npm install'
-            }
-        }
-
         stage('Build App') {
             steps {
                 sh 'npm run build'
